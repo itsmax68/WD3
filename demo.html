@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Genie</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(120deg, #43cea2 0%, #185a9d 100%);
+            min-height: 100vh;
+        }
+        .genie-header {
+            background: #fff;
+            border-radius: 20px 20px 0 0;
+            padding: 36px 12px 12px 12px;
+            box-shadow: 0 6px 24px rgba(38,100,122,0.13);
+            text-align: center;
+            margin-top: 40px;
+        }
+        .profile-strip {
+            font-size: 1rem;
+            color: #185a9d;
+            margin-top: 4px;
+        }
+        .genie-card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 2px 24px rgba(67,206,162,0.14);
+            background: #fff;
+            margin-bottom: 28px;
+        }
+        .tips-list {
+            background: #f4fafd;
+            border-radius: 16px;
+            margin-top: 18px;
+            padding: 14px 22px 10px 22px;
+        }
+        .pw-output {
+            font-size: 1.35em;
+            color: #185a9d;
+            background: #e6f5ff;
+            border-radius: 6px;
+            padding: 8px 15px;
+            letter-spacing: 1.2px;
+            word-break: break-all;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+        .btn-copy {
+            margin-left: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="genie-header">
+            <h1>Password Genie</h1>
+            <p class="fs-5 mb-1">Generate secure passwords instantly!</p>
+            <div class="profile-strip">
+                Name: <b>Manav Kalathiya</b> | Enrollment No: <b>240905040038</b>
+            </div>
+        </div>
+
+        <!-- Password Generator Card -->
+        <div class="row justify-content-center mt-3">
+            <div class="col-lg-6">
+                <div class="card genie-card p-4">
+                    <h4 class="mb-3 text-center">Password Generator</h4>
+                    <form id="pwForm">
+                        <div class="row align-items-end mb-3">
+                            <div class="col-md-6 mb-2">
+                                <label for="pwLength" class="form-label">Password Length</label>
+                                <input type="number" id="pwLength" class="form-control" value="12" min="6" max="32" required>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label">Options</label>
+                                <div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="uppercase" checked>
+                                        <label class="form-check-label" for="uppercase">Uppercase</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="numbers" checked>
+                                        <label class="form-check-label" for="numbers">Numbers</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="symbols">
+                                        <label class="form-check-label" for="symbols">Symbols</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100 mb-3">Generate Password</button>
+                    </form>
+                    <div class="text-center mt-2">
+                        <span id="pwResult" class="pw-output"></span>
+                        <button class="btn btn-outline-primary btn-sm btn-copy" id="copyBtn" style="display:none;">Copy</button>
+                    </div>
+                </div>
+                
+                <!-- Tips Section -->
+                <div class="tips-list shadow-sm">
+                    <strong>Tips for a Strong Password:</strong>
+                    <ul>
+                        <li>Use a mix of uppercase, lowercase, numbers, and symbols.</li>
+                        <li>Make it at least 12 characters long.</li>
+                        <li>Avoid common words or personal info.</li>
+                        <li>Don’t reuse passwords on multiple websites.</li>
+                        <li>Use a password manager to store passwords securely.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center text-white py-4 mt-5" style="background:rgba(24,90,157,0.18); font-size:1.05em; border-radius: 0 0 18px 18px;">
+            &copy; 2025 Password Genie | Created by Manav Kalathiya (240905040038)
+        </footer>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Password generator script -->
+    <script>
+        function generatePassword(length, useUpper, useNumbers, useSymbols) {
+            const lower = 'abcdefghijklmnopqrstuvwxyz';
+            const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const numbers = '0123456789';
+            const symbols = '!@#$%^&*()_+-=[]{},./?';
+            let chars = lower;
+            if (useUpper) chars += upper;
+            if (useNumbers) chars += numbers;
+            if (useSymbols) chars += symbols;
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                password += chars[Math.floor(Math.random() * chars.length)];
+            }
+            return password;
+        }
+
+        document.getElementById('pwForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const len = parseInt(document.getElementById('pwLength').value);
+            const useUpper = document.getElementById('uppercase').checked;
+            const useNumbers = document.getElementById('numbers').checked;
+            const useSymbols = document.getElementById('symbols').checked;
+            const pw = generatePassword(len, useUpper, useNumbers, useSymbols);
+            document.getElementById('pwResult').innerText = pw;
+            document.getElementById('copyBtn').style.display = 'inline-block';
+        });
+
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            const pw = document.getElementById('pwResult').innerText;
+            if (pw) {
+                navigator.clipboard.writeText(pw);
+                this.innerText = "Copied!";
+                setTimeout(() => { this.innerText = "Copy"; }, 1200);
+            }
+        });
+    </script>
+</body>
+</html>
